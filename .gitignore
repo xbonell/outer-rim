@@ -6,6 +6,7 @@
 
 # SSL Certificates and sensitive data
 nginx/certs/
+nginx/conf.d/default.conf
 acme/
 *.pem
 *.key
