@@ -28,24 +28,38 @@ This project provides a reverse proxy solution using nginx-proxy with automatic 
    cd outer-rim
    ```
 
-2. **Create environment file**
+2. **Run the secure setup script**
    ```bash
-   cp .env.example .env
+   ./setup.sh
    ```
    
-   Edit `.env` and add your email for Let's Encrypt notifications:
-   ```
-   DEFAULT_EMAIL=your-email@example.com
-   ```
+   This script will:
+   - Create necessary directories with proper permissions
+   - Set up environment file from template
+   - Validate Docker Compose configuration
+   - Configure basic firewall rules
+   - Create monitoring scripts
 
-3. **Create required directories**
+3. **Edit environment file**
    ```bash
-   mkdir -p nginx/certs nginx/vhost.d nginx/html
+   nano .env
    ```
+   
+   **IMPORTANT**: Update with your actual email for Let's Encrypt notifications:
+   ```
+   LETSENCRYPT_EMAIL=your-actual-email@example.com
+   ```
+   
+   ⚠️ **Security Note**: Never use the default email address. The setup script will validate that you've changed it.
 
 4. **Start the services**
    ```bash
    docker-compose up -d
+   ```
+
+5. **Monitor security**
+   ```bash
+   ./monitor.sh
    ```
 
 ## Configuration
@@ -173,12 +187,43 @@ docker-compose logs nginx-proxy
 docker-compose logs acme-companion
 ```
 
+## Security Features
+
+This setup includes comprehensive security measures:
+
+### Container Security
+- **Read-only root filesystems** where possible
+- **No new privileges** security option
+- **Resource limits** to prevent DoS attacks
+- **Health checks** for all services
+- **Latest image tags** for security patches
+
+### Network Security
+- **Isolated Docker network** with custom subnet
+- **Rate limiting** to prevent abuse
+- **Security headers** (HSTS, CSP, X-Frame-Options, etc.)
+- **SSL/TLS 1.2+ only** with secure cipher suites
+
+### Access Control
+- **Proper file permissions** (600 for sensitive files)
+- **Hidden file protection** in nginx
+- **Sensitive file blocking** (.env, .log, .sql, etc.)
+- **Docker socket read-only access**
+
+### Monitoring & Maintenance
+- **Security checklist** for regular audits
+- **Automated setup script** with security validation
+- **Monitoring script** for ongoing security checks
+- **Comprehensive logging** for audit trails
+
 ## Security Considerations
 
 - Keep your `.env` file secure and never commit it to version control
 - Regularly update Docker images for security patches
 - Monitor certificate renewal logs
-- Consider using Docker secrets for sensitive environment variables
+- Use the provided security checklist for regular audits
+- Consider using Docker secrets for sensitive environment variables in production
+- Run security scans regularly with tools like Trivy
 
 ## Contributing
 
