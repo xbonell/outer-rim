@@ -1,14 +1,15 @@
-# Language redirect map
-map $http_accept_language $lang_redirect {
-    default       /es/;
-    ~^ca          /ca/;
-    ~^es          /es/;
-    ~^en          /en/;
-}
-
 # Redirect based on language if requesting root
 location = / {
-    return 302 $lang_redirect;
+    if ($http_accept_language ~* ^ca) {
+        return 302 /ca/;
+    }
+    if ($http_accept_language ~* ^es) {
+        return 302 /es/;
+    }
+    if ($http_accept_language ~* ^en) {
+        return 302 /en/;
+    }
+    return 302 /es/;
 }
 
 # Usual static file serving

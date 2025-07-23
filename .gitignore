@@ -27,6 +27,8 @@ nginx/logs/
 .idea/
 *.swp
 *.swo
+.cursor
+custom_modes
 
 # OS
 .DS_Store
