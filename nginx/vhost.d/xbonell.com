@@ -12,8 +12,8 @@ location = / {
     return 302 /es/;
 }
 
-# Serve static files and fallback to error
-location / {
+# Serve language-specific static files
+location ~ ^/(ca|es|en)/ {
     root /usr/share/nginx/html;
     try_files $uri $uri/ /error.html =404;
 }
