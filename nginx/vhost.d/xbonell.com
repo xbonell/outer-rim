@@ -14,11 +14,9 @@ location = / {
 
 # Main location for all other requests
 location / {
+    root /usr/share/nginx/html;
     try_files $uri $uri/ /error;
 }
-
-# Usual static file serving
-root /usr/share/nginx/html;
 
 # Security headers
 add_header X-Frame-Options "SAMEORIGIN" always;
