@@ -15,7 +15,16 @@ location = / {
 # Serve static files and fallback to error
 location / {
     root /usr/share/nginx/html;
-    try_files $uri $uri/ /error;
+    try_files $uri $uri/ /error.html =404;
+}
+
+# Error page handling
+error_page 400 401 403 404 500 502 503 504 /error;
+
+location = /error {
+    root /usr/share/nginx/html;
+    try_files /error.html =500;
+    internal;
 }
 
 # Security headers
