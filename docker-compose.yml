@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.9'
 
 services:
   nginx-proxy:
@@ -28,9 +28,6 @@ services:
         limits:
           cpus: '0.5'
           memory: 512M
-        reservations:
-          cpus: '0.1'
-          memory: 128M
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost/"]
       interval: 30s
@@ -60,9 +57,6 @@ services:
         limits:
           cpus: '0.3'
           memory: 256M
-        reservations:
-          cpus: '0.05'
-          memory: 64M
     healthcheck:
       test: ["CMD", "pgrep", "acme.sh"]
       interval: 30s
@@ -94,9 +88,6 @@ services:
         limits:
           cpus: '0.2'
           memory: 128M
-        reservations:
-          cpus: '0.05'
-          memory: 32M
     healthcheck:
       test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]
       interval: 30s
