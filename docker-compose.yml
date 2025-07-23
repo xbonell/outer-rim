@@ -13,7 +13,7 @@ services:
       - ./nginx/certs:/etc/nginx/certs:ro
       - ./nginx/vhost.d:/etc/nginx/vhost.d:ro
       - ./nginx/html:/usr/share/nginx/html:ro
-      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:rw
     networks:
       - web
     security_opt:
