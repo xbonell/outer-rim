@@ -75,6 +75,7 @@ services:
     volumes:
       - ./sites/xbonell.com/dist:/usr/share/nginx/html:ro
       - ./nginx/security-headers.conf:/etc/nginx/conf.d/security-headers.conf:ro
+      - ./nginx/conf.d/xbonell.com.conf:/etc/nginx/conf.d/xbonell.com.conf:ro
     networks:
       - web
     security_opt:
