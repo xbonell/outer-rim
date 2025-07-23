@@ -48,4 +48,3 @@ sites/**/*
 
 # Override files
 docker-compose.override.yml
-
