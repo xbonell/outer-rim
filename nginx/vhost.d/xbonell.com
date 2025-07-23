@@ -12,6 +12,11 @@ location = / {
     return 302 /es/;
 }
 
+# Main location for all other requests
+location / {
+    try_files $uri $uri/ /error;
+}
+
 # Usual static file serving
 root /usr/share/nginx/html;
 
