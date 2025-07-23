@@ -12,27 +12,8 @@ location = / {
     return 302 /es/;
 }
 
-# Serve language-specific static files
-location ~ ^/(ca|es|en)/ {
-    root /usr/share/nginx/html;
-    try_files $uri $uri/ /error.html =404;
-}
-
-# Serve static files and fallback to error
-location / {
-    root /usr/share/nginx/html;
-    try_files $uri $uri/ /error/ =404;
-}
-
-# Error page handling
-error_page 400 401 403 404 500 502 503 504 /error/;
-
-location = /error/ {
-    root /usr/share/nginx/html;
-    index index.html;
-    # No try_files needed if index.html exists in /usr/share/nginx/html/error/
-    internal;
-}
+# Usual static file serving
+root /usr/share/nginx/html;
 
 # Security headers
 add_header X-Frame-Options "SAMEORIGIN" always;
