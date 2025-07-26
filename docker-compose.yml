@@ -103,12 +103,13 @@ services:
       - VIRTUAL_HOST=webhook.xbonell.com
       - LETSENCRYPT_HOST=webhook.xbonell.com
       - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL:?LETSENCRYPT_EMAIL environment variable is required}
-      - GIT_SSH_COMMAND=ssh -i /home/webhookuser/.ssh/id_ed25519 -o StrictHostKeyChecking=no
     volumes:
       - ./hooks/hooks.json:/etc/webhook/hooks.json:ro
       - ./scripts:/etc/webhook/scripts:ro
       - ./sites:/etc/webhook/sites:rw
       - /home/xbonell/.ssh:/home/webhookuser/.ssh:ro
+    ports:
+      - "9000:9000"
     command: >
       sh -c "
         apk add --no-cache curl bash git openssh &&
@@ -117,18 +118,18 @@ services:
         curl -L https://github.com/adnanh/webhook/releases/download/2.8.1/webhook-linux-amd64.tar.gz | tar xz &&
         mv webhook-linux-amd64/webhook /usr/local/bin/webhook &&
         chown -R webhookuser:webhookuser /usr/local/bin/webhook &&
-        su webhookuser -c 'webhook -hooks /etc/webhook/hooks.json -verbose'
+        chown -R webhookuser:webhookuser /etc/webhook/sites &&
+        su webhookuser -c 'webhook -hooks /etc/webhook/hooks.json -verbose -port 9000'
       "
     networks:
       - web
-    read_only: false
-    tmpfs:
-      - /tmp
+    security_opt:
+      - no-new-privileges:true
     deploy:
       resources:
         limits:
-          cpus: '0.2'
-          memory: 128M
+          cpus: '0.5'
+          memory: 512M
     healthcheck:
       test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:9000/"]
       interval: 30s
