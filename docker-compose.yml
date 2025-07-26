@@ -115,11 +115,11 @@ services:
         corepack enable && yarn set version stable &&
         curl -L https://github.com/adnanh/webhook/releases/download/2.8.1/webhook-linux-amd64.tar.gz | tar xz &&
         mv webhook-linux-amd64/webhook /usr/local/bin/webhook &&
-        webhook -hooks /etc/webhook/hooks.json -verbose
+        chown -R 1000:1000 /usr/local/bin/webhook &&
+        su webhookuser -c 'webhook -hooks /etc/webhook/hooks.json -verbose'
       "
     networks:
       - web
-    user: 1000:1000
     read_only: false
     tmpfs:
       - /tmp
