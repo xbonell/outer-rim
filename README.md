@@ -1,16 +1,19 @@
 # Outer Rim
 
-A Docker Compose setup for nginx-proxy with automatic SSL certificate management using Let's Encrypt.
+A Docker Compose setup for nginx-proxy with automatic SSL certificate management using Let's Encrypt, featuring a hybrid architecture that supports both Docker containers and native services.
 
 ## Overview
 
-This project provides a reverse proxy solution using nginx-proxy with automatic SSL certificate generation and renewal through Let's Encrypt. It's perfect for hosting multiple web applications behind a single domain with automatic HTTPS.
+This project provides a reverse proxy solution using nginx-proxy with automatic SSL certificate generation and renewal through Let's Encrypt. It's perfect for hosting multiple web applications behind a single domain with automatic HTTPS, including support for native services running outside of Docker containers.
 
 ## Features
 
 - **Reverse Proxy**: Routes traffic to multiple containers based on hostnames
 - **Automatic SSL**: Let's Encrypt certificates are automatically generated and renewed
+- **Hybrid Architecture**: Supports both Docker containers and native services
 - **Docker Integration**: Seamlessly works with Docker containers
+- **Native Service Support**: Custom nginx configuration for non-Docker services
+- **Automated Certificate Renewal**: Cron-based SSL certificate management
 - **Easy Setup**: Simple configuration with Docker Compose
 
 ## Prerequisites
@@ -57,7 +60,18 @@ This project provides a reverse proxy solution using nginx-proxy with automatic 
    docker-compose up -d
    ```
 
-5. **Monitor security**
+5. **Set up SSL certificate automation**
+   ```bash
+   # Make renewal script executable
+   chmod +x scripts/renew-webhook-cert.sh
+   
+   # Add to crontab (runs daily at 2 AM)
+   crontab -e
+   # Add this line:
+   0 2 * * * /path/to/outer-rim/scripts/renew-webhook-cert.sh
+   ```
+
+6. **Monitor security**
    ```bash
    ./monitor.sh
    ```
@@ -68,9 +82,11 @@ This project provides a reverse proxy solution using nginx-proxy with automatic 
 
 Create a `.env` file with the following variables:
 
-- `DEFAULT_EMAIL`: Your email address for Let's Encrypt notifications
+- `LETSENCRYPT_EMAIL`: Your email address for Let's Encrypt notifications
 
 ### Adding Your Applications
+
+#### Docker Containers
 
 To add your web applications, create additional services in your `docker-compose.yml`:
 
@@ -86,6 +102,25 @@ services:
       - web
 ```
 
+#### Native Services
+
+For native services running outside Docker containers:
+
+1. **Create custom nginx configuration** in `nginx/conf.d/your-domain.com.conf`
+2. **Generate SSL certificate manually** or set up automation
+3. **Configure routing** to your native service
+
+Example for a native webhook service:
+```bash
+# Generate SSL certificate
+./scripts/generate-webhook-cert.sh
+
+# Set up automatic renewal
+chmod +x scripts/renew-webhook-cert.sh
+crontab -e
+# Add: 0 2 * * * /path/to/outer-rim/scripts/renew-webhook-cert.sh
+```
+
 ### Network Configuration
 
 All services that need to be proxied should be connected to the `web` network:
@@ -93,7 +128,36 @@ All services that need to be proxied should be connected to the `web` network:
 ```yaml
 networks:
   web:
-    external: true
+    external: false
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.name: nginx-proxy
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+```
+
+## SSL Certificate Management
+
+### Automatic Renewal
+
+The system includes automated SSL certificate renewal for native services:
+
+- **Renewal Script**: `scripts/renew-webhook-cert.sh`
+- **Monitoring Script**: `scripts/check-webhook-cert.sh`
+- **Logging**: `logs/webhook-cert-renewal.log`
+- **Schedule**: Daily cron job (recommended: 2 AM)
+
+### Manual Certificate Generation
+
+For initial setup or troubleshooting:
+
+```bash
+# Generate certificate for webhook service
+./scripts/generate-webhook-cert.sh
+
+# Check certificate status
+./scripts/check-webhook-cert.sh
 ```
 
 ## Directory Structure
