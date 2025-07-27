@@ -73,10 +73,10 @@ services:
       - ./nginx/certs:/certs
     entrypoint: |
       sh -c "
-        ln -sf /certs/../_test_webhook.xbonell.com/chain.pem /certs/webhook.xbonell.com.chain.pem &&
-        ln -sf /certs/../_test_webhook.xbonell.com/fullchain.pem /certs/webhook.xbonell.com.crt &&
-        ln -sf /certs/../_test_webhook.xbonell.com/key.pem /certs/webhook.xbonell.com.key &&
-        ln -sf /certs/../dhparam.pem /certs/webhook.xbonell.com.dhparam.pem
+        ln -sf /certs/_test_webhook.xbonell.com/chain.pem /certs/webhook.xbonell.com.chain.pem &&
+        ln -sf /certs/_test_webhook.xbonell.com/fullchain.pem /certs/webhook.xbonell.com.crt &&
+        ln -sf /certs/_test_webhook.xbonell.com/key.pem /certs/webhook.xbonell.com.key &&
+        ln -sf /certs/dhparam.pem /certs/webhook.xbonell.com.dhparam.pem
       "
 
   xbonell.com:
