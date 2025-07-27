@@ -65,23 +65,10 @@ services:
       retries: 3
       start_period: 40s
 
-  # cert-linker:
-  #   image: busybox
-  #   depends_on:
-  #     - acme-companion
-  #   volumes:
-  #     - ./nginx/certs:/certs
-  #   entrypoint: |
-  #     sh -c "
-  #       ln -sf ./_test_webhook.xbonell.com/chain.pem /certs/webhook.xbonell.com.chain.pem &&
-  #       ln -sf ./_test_webhook.xbonell.com/fullchain.pem /certs/webhook.xbonell.com.crt &&
-  #       ln -sf ./_test_webhook.xbonell.com/key.pem /certs/webhook.xbonell.com.key &&
-  #       ln -sf ./dhparam.pem /certs/webhook.xbonell.com.dhparam.pem
-  #     "
-
   xbonell.com:
     image: nginx:alpine
     container_name: xbonell.com
+    restart: unless-stopped
     environment:
       - VIRTUAL_HOST=xbonell.com,www.xbonell.com
       - LETSENCRYPT_HOST=xbonell.com,www.xbonell.com
