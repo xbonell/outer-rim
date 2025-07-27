@@ -65,10 +65,17 @@ This project provides a reverse proxy solution using nginx-proxy with automatic 
    # Make renewal script executable
    chmod +x scripts/renew-webhook-cert.sh
    
+   # Create logs directory
+   mkdir -p logs
+   
    # Add to crontab (runs daily at 2 AM)
+   # For local development:
    crontab -e
    # Add this line:
    0 2 * * * /path/to/outer-rim/scripts/renew-webhook-cert.sh
+   
+   # For remote server (replace with your actual path):
+   echo "0 2 * * * /opt/docker-stack/scripts/renew-webhook-cert.sh" | crontab -
    ```
 
 6. **Monitor security**
@@ -117,8 +124,14 @@ Example for a native webhook service:
 
 # Set up automatic renewal
 chmod +x scripts/renew-webhook-cert.sh
+mkdir -p logs
+
+# For local development:
 crontab -e
 # Add: 0 2 * * * /path/to/outer-rim/scripts/renew-webhook-cert.sh
+
+# For remote server:
+echo "0 2 * * * /opt/docker-stack/scripts/renew-webhook-cert.sh" | crontab -
 ```
 
 ### Network Configuration
@@ -158,6 +171,12 @@ For initial setup or troubleshooting:
 
 # Check certificate status
 ./scripts/check-webhook-cert.sh
+
+# Verify cron job is set up
+crontab -l
+
+# Test the renewal script manually
+./scripts/renew-webhook-cert.sh
 ```
 
 ## Directory Structure
@@ -249,6 +268,12 @@ docker-compose logs nginx-proxy
 
 # acme-companion logs
 docker-compose logs acme-companion
+
+# Certificate renewal logs
+tail -f logs/webhook-cert-renewal.log
+
+# Check cron job status
+crontab -l
 ```
 
 ## Security Features
