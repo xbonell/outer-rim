@@ -26,9 +26,6 @@ if [ ! -f "$HOOKS_FILE" ]; then
     exit 1
 fi
 
-# Make scripts executable
-chmod +x "$SCRIPT_DIR/scripts/"*.sh
-
 echo "📋 Using hooks file: $HOOKS_FILE"
 echo "🌐 Webhook will be available at: http://localhost:9000"
 echo "🔗 Access via: https://webhook.xbonell.com"

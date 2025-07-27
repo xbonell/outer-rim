@@ -1,7 +1,7 @@
 # Proxy configuration for webhook.xbonell.com
 # This routes traffic to the natively running webhook service on port 9000
 
-proxy_pass http://host.docker.internal:9000;
+proxy_pass http://172.17.0.1:9000;
 proxy_set_header Host $host;
 proxy_set_header X-Real-IP $remote_addr;
 proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
