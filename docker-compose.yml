@@ -28,7 +28,7 @@ services:
           cpus: '0.5'
           memory: 512M
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost/"]
+      test: ["CMD", "pgrep", "nginx"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -60,6 +60,34 @@ services:
           memory: 256M
     healthcheck:
       test: ["CMD", "pgrep", "acme.sh"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  webhook:
+    image: nginx:alpine
+    container_name: webhook
+    environment:
+      - VIRTUAL_HOST=webhook.xbonell.com
+      - LETSENCRYPT_HOST=webhook.xbonell.com
+      - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL:?LETSENCRYPT_EMAIL environment variable is required}
+    networks:
+      - web
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /var/cache/nginx
+      - /var/run
+    deploy:
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 64M
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]
       interval: 30s
       timeout: 10s
       retries: 3
