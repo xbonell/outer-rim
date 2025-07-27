@@ -95,49 +95,6 @@ services:
       retries: 3
       start_period: 40s
 
-  webhook:
-    image: node:22-alpine
-    container_name: webhook
-    restart: unless-stopped
-    environment:
-      - VIRTUAL_HOST=webhook.xbonell.com
-      - LETSENCRYPT_HOST=webhook.xbonell.com
-      - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL:?LETSENCRYPT_EMAIL environment variable is required}
-    volumes:
-      - ./hooks/hooks.json:/etc/webhook/hooks.json:ro
-      - ./scripts:/etc/webhook/scripts:ro
-      - ./sites:/etc/webhook/sites:rw
-      - /home/xbonell/.ssh:/home/webhookuser/.ssh:ro
-    ports:
-      - "9000:9000"
-    command: >
-      sh -c "
-        apk add --no-cache curl bash git openssh &&
-        adduser -D -u 1000 webhookuser &&
-        corepack enable && yarn set version stable &&
-        curl -L https://github.com/adnanh/webhook/releases/download/2.8.1/webhook-linux-amd64.tar.gz | tar xz &&
-        mv webhook-linux-amd64/webhook /usr/local/bin/webhook &&
-        chown -R webhookuser:webhookuser /usr/local/bin/webhook &&
-        chown -R webhookuser:webhookuser /etc/webhook/sites &&
-        su webhookuser -c 'webhook -hooks /etc/webhook/hooks.json -verbose -port 9000'
-      "
-    networks:
-      - web
-    security_opt:
-      - no-new-privileges:true
-    deploy:
-      resources:
-        limits:
-          cpus: '0.5'
-          memory: 512M
-    healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:9000/"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
-
-
 networks:
   web:
     external: false
