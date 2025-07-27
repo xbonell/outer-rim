@@ -1,6 +1,7 @@
 # Proxy configuration for webhook.xbonell.com
 # This routes traffic to the natively running webhook service on port 9000
 
+# Override the proxy_pass to point to the native webhook service
 proxy_pass http://172.17.0.1:9000;
 proxy_set_header Host $host;
 proxy_set_header X-Real-IP $remote_addr;
