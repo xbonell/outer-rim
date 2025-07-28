@@ -14,6 +14,7 @@ This project provides a reverse proxy solution using nginx-proxy with automatic 
 - **Docker Integration**: Seamlessly works with Docker containers
 - **Native Service Support**: Custom nginx configuration for non-Docker services
 - **Easy Setup**: Simple configuration with Docker Compose
+- **Security Focused**: Comprehensive security measures and monitoring
 
 ## Prerequisites
 
@@ -40,7 +41,7 @@ This project provides a reverse proxy solution using nginx-proxy with automatic 
    - Set up environment file from template
    - Validate Docker Compose configuration
    - Configure basic firewall rules
-   - Create monitoring scripts
+   - Set up security monitoring
 
 3. **Edit environment file**
    ```bash
@@ -61,16 +62,26 @@ This project provides a reverse proxy solution using nginx-proxy with automatic 
 
 5. **Monitor security**
    ```bash
-   ./monitor.sh
+   # Check service status
+   docker-compose ps
+   
+   # View logs
+   docker-compose logs -f
    ```
 
 ## Configuration
 
 ### Environment Variables
 
-Create a `.env` file with the following variables:
+The `.env` file contains the following variables:
 
 - `LETSENCRYPT_EMAIL`: Your email address for Let's Encrypt notifications
+- `ACME_CA_URI`: ACME server URI (staging for testing, production for live)
+- `MAX_CERTS_PER_DOMAIN`: Maximum certificates per domain (default: 5)
+- `CERT_RENEWAL_THRESHOLD`: Days before expiration to renew (default: 30)
+- `RATE_LIMIT_REQUESTS`: Rate limiting requests per window (default: 100)
+- `RATE_LIMIT_WINDOW`: Rate limiting time window (default: 1m)
+- `LOG_LEVEL`: Logging level (default: info)
 
 ### Adding Your Applications
 
@@ -144,26 +155,38 @@ docker-compose restart acme-companion
 ```
 outer-rim/
 ├── docker-compose.yml    # Main Docker Compose configuration
-├── .env                  # Environment variables (create from .env.example)
+├── .env                  # Environment variables (create from env.example)
 ├── .gitignore           # Git ignore rules
+├── setup.sh             # Secure setup script
+├── security-checklist.md # Security audit checklist
 ├── nginx/
 │   ├── certs/           # SSL certificates (auto-generated)
 │   ├── vhost.d/         # Custom nginx configurations
+│   ├── conf.d/          # Additional nginx configurations
 │   └── html/            # Static files
+├── sites/               # Static site content
 └── README.md            # This file
 ```
 
 ## Services
 
 ### nginx-proxy
-- **Image**: `nginxproxy/nginx-proxy`
+- **Image**: `nginxproxy/nginx-proxy:1.8`
 - **Ports**: 80, 443
 - **Purpose**: Reverse proxy that automatically routes traffic based on `VIRTUAL_HOST` environment variables
+- **Security**: Read-only filesystem, resource limits, no new privileges
 
 ### acme-companion
-- **Image**: `nginxproxy/acme-companion`
+- **Image**: `nginxproxy/acme-companion:latest`
 - **Purpose**: Automatically generates and renews Let's Encrypt SSL certificates
 - **Dependencies**: nginx-proxy
+- **Security**: Resource limits, no new privileges
+
+### xbonell.com (Example Site)
+- **Image**: `nginx:alpine`
+- **Purpose**: Example static site configuration
+- **Domains**: xbonell.com, www.xbonell.com
+- **Security**: Read-only filesystem, resource limits
 
 ## Usage Examples
 
@@ -229,11 +252,11 @@ docker-compose logs nginx-proxy
 # acme-companion logs
 docker-compose logs acme-companion
 
-# Certificate renewal logs
-tail -f logs/webhook-cert-renewal.log
+# All services logs
+docker-compose logs -f
 
-# Check cron job status
-crontab -l
+# Check service status
+docker-compose ps
 ```
 
 ## Security Features
@@ -262,8 +285,8 @@ This setup includes comprehensive security measures:
 ### Monitoring & Maintenance
 - **Security checklist** for regular audits
 - **Automated setup script** with security validation
-- **Monitoring script** for ongoing security checks
 - **Comprehensive logging** for audit trails
+- **Resource monitoring** and limits
 
 ## Security Considerations
 
@@ -273,6 +296,39 @@ This setup includes comprehensive security measures:
 - Use the provided security checklist for regular audits
 - Consider using Docker secrets for sensitive environment variables in production
 - Run security scans regularly with tools like Trivy
+
+## Maintenance
+
+### Regular Security Audits
+Use the provided security checklist:
+```bash
+# Review security-checklist.md for comprehensive audit guidelines
+cat security-checklist.md
+```
+
+### Updates
+```bash
+# Update Docker images
+docker-compose pull
+
+# Restart services with new images
+docker-compose up -d
+
+# Check for updates
+docker-compose images
+```
+
+### Monitoring
+```bash
+# Check service health
+docker-compose ps
+
+# Monitor logs
+docker-compose logs -f
+
+# Check resource usage
+docker stats
+```
 
 ## Contributing
 

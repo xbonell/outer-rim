@@ -62,7 +62,7 @@ services:
       - LETSENCRYPT_HOST=xbonell.com,www.xbonell.com
       - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL:?LETSENCRYPT_EMAIL environment variable is required}
     volumes:
-      - ./sites/xbonell.com/dist:/usr/share/nginx/html:ro
+      - ./sites/xbonell.com:/usr/share/nginx/html:ro
     networks:
       - web
     security_opt:
