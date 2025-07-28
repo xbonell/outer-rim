@@ -13,7 +13,6 @@ This project provides a reverse proxy solution using nginx-proxy with automatic 
 - **Hybrid Architecture**: Supports both Docker containers and native services
 - **Docker Integration**: Seamlessly works with Docker containers
 - **Native Service Support**: Custom nginx configuration for non-Docker services
-- **Automated Certificate Renewal**: Cron-based SSL certificate management
 - **Easy Setup**: Simple configuration with Docker Compose
 
 ## Prerequisites
@@ -60,25 +59,7 @@ This project provides a reverse proxy solution using nginx-proxy with automatic 
    docker-compose up -d
    ```
 
-5. **Set up SSL certificate automation**
-   ```bash
-   # Make renewal script executable
-   chmod +x scripts/renew-webhook-cert.sh
-   
-   # Create logs directory
-   mkdir -p logs
-   
-   # Add to crontab (runs daily at 2 AM)
-   # For local development:
-   crontab -e
-   # Add this line:
-   0 2 * * * /path/to/outer-rim/scripts/renew-webhook-cert.sh
-   
-   # For remote server (replace with your actual path):
-   echo "0 2 * * * /opt/docker-stack/scripts/renew-webhook-cert.sh" | crontab -
-   ```
-
-6. **Monitor security**
+5. **Monitor security**
    ```bash
    ./monitor.sh
    ```
@@ -117,23 +98,6 @@ For native services running outside Docker containers:
 2. **Generate SSL certificate manually** or set up automation
 3. **Configure routing** to your native service
 
-Example for a native webhook service:
-```bash
-# Generate SSL certificate
-./scripts/generate-webhook-cert.sh
-
-# Set up automatic renewal
-chmod +x scripts/renew-webhook-cert.sh
-mkdir -p logs
-
-# For local development:
-crontab -e
-# Add: 0 2 * * * /path/to/outer-rim/scripts/renew-webhook-cert.sh
-
-# For remote server:
-echo "0 2 * * * /opt/docker-stack/scripts/renew-webhook-cert.sh" | crontab -
-```
-
 ### Network Configuration
 
 All services that need to be proxied should be connected to the `web` network:
@@ -154,29 +118,25 @@ networks:
 
 ### Automatic Renewal
 
-The system includes automated SSL certificate renewal for native services:
+SSL certificates are automatically managed by the acme-companion container:
 
-- **Renewal Script**: `scripts/renew-webhook-cert.sh`
-- **Monitoring Script**: `scripts/check-webhook-cert.sh`
-- **Logging**: `logs/webhook-cert-renewal.log`
-- **Schedule**: Daily cron job (recommended: 2 AM)
+- **Automatic Generation**: Certificates are created when domains are first accessed
+- **Automatic Renewal**: Certificates are renewed before expiration
+- **Storage**: Certificates are stored in `./nginx/certs/`
 
 ### Manual Certificate Generation
 
-For initial setup or troubleshooting:
+For troubleshooting or custom certificates:
 
 ```bash
-# Generate certificate for webhook service
-./scripts/generate-webhook-cert.sh
-
 # Check certificate status
-./scripts/check-webhook-cert.sh
+docker-compose logs acme-companion
 
-# Verify cron job is set up
-crontab -l
+# Verify certificates are generated
+ls -la nginx/certs/
 
-# Test the renewal script manually
-./scripts/renew-webhook-cert.sh
+# Test certificate renewal
+docker-compose restart acme-companion
 ```
 
 ## Directory Structure
