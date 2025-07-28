@@ -78,6 +78,32 @@ services:
           cpus: '0.2'
           memory: 128M
 
+  bgespecialitats.com:
+    image: nginx:alpine
+    container_name: bgespecialitats.com
+    restart: unless-stopped
+    environment:
+      - VIRTUAL_HOST=bg.xbonell.com
+      - LETSENCRYPT_HOST=bg.xbonell.com
+      - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL:?LETSENCRYPT_EMAIL environment variable is required}
+    volumes:
+      - ./sites/bgespecialitats.com:/usr/share/nginx/html:ro
+    networks:
+      - web
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /var/cache/nginx
+      - /var/run
+    deploy:
+      resources:
+        limits:
+          cpus: '0.2'
+          memory: 128M
+
+
 networks:
   web:
     external: false
