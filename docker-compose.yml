@@ -83,8 +83,8 @@ services:
     container_name: bgespecialitats.com
     restart: unless-stopped
     environment:
-      - VIRTUAL_HOST=bg.xbonell.com
-      - LETSENCRYPT_HOST=bg.xbonell.com
+      - VIRTUAL_HOST=bgespecialitats.com,www.bgespecialitats.com
+      - LETSENCRYPT_HOST=bgespecialitats.com,www.bgespecialitats.com
       - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL:?LETSENCRYPT_EMAIL environment variable is required}
     volumes:
       - ./sites/bgespecialitats.com:/usr/share/nginx/html:ro
