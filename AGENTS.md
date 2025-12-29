@@ -217,6 +217,8 @@ docker-compose restart acme-companion
 - Ensure your domain points to the server's IP address
 - Check that ports 80 and 443 are open
 - Verify the email address in your `.env` file
+- **HTTPS not working but HTTP works**: Check if `ACME_CA_URI` is set to staging. Staging certificates (with `_test_` prefix) are not trusted by browsers. Set `ACME_CA_URI=https://acme-v02.api.letsencrypt.org/directory` in your `.env` file and recreate the acme-companion container
+- **Certificate generation failures**: Check DNS resolution with `dig +short your-domain.com A`. Ensure DNS is properly configured before certificate generation
 
 ### Container Communication
 - Make sure all containers are on the `web` network
