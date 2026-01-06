@@ -1,20 +1,19 @@
 # Outer Rim
 
-A Docker Compose setup for nginx-proxy with automatic SSL certificate management using Let's Encrypt, featuring a hybrid architecture that supports both Docker containers and native services.
+A Docker Compose-based reverse proxy solution for hosting multiple web applications across multiple domains, with automatic SSL certificate management via Let's Encrypt.
 
 ## Overview
 
-This project provides a reverse proxy solution using nginx-proxy with automatic SSL certificate generation and renewal through Let's Encrypt. It's perfect for hosting multiple web applications behind a single domain with automatic HTTPS, including support for native services running outside of Docker containers.
+This project provides a reverse proxy solution using nginx-proxy with automatic SSL certificate generation and renewal through Let's Encrypt. It's perfect for hosting multiple web applications across multiple domains with automatic HTTPS. While primarily designed for Docker containers, it can also be configured to proxy to native services running outside Docker.
 
 ## Features
 
 - **Reverse Proxy**: Routes traffic to multiple containers based on hostnames
 - **Automatic SSL**: Let's Encrypt certificates are automatically generated and renewed
-- **Hybrid Architecture**: Supports both Docker containers and native services
-- **Docker Integration**: Seamlessly works with Docker containers
-- **Native Service Support**: Custom nginx configuration for non-Docker services
+- **Docker Integration**: Seamlessly works with Docker containers via environment variables
 - **Easy Setup**: Simple configuration with Docker Compose
 - **Security Focused**: Comprehensive security measures and monitoring
+- **Native Service Support**: Can be configured to proxy to services running outside Docker (requires manual setup)
 
 ## Prerequisites
 

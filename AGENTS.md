@@ -4,19 +4,19 @@ This document provides comprehensive context for AI agents working on this proje
 
 ## Project Overview
 
-**Outer Rim** is a Docker Compose-based reverse proxy solution for hosting multiple web applications behind a single domain, with automatic SSL certificate management via Let's Encrypt.
+**Outer Rim** is a Docker Compose-based reverse proxy solution for hosting multiple web applications across multiple domains, with automatic SSL certificate management via Let's Encrypt.
 
 ### Key Features
 - Reverse proxy with nginx-proxy
 - Automatic SSL (Let's Encrypt)
 - Easy Docker integration
 - Security-focused setup and monitoring
-- Hybrid architecture supporting both Docker containers and native services
+- Native service support (requires manual configuration)
 
 ### Vision & Context
 - Designed for developers/ops hosting multiple web apps securely and easily
 - User needs: simple setup, automatic HTTPS, minimal manual intervention, strong security defaults
-- Context: Used on servers with Docker, a domain, and open ports 80/443
+- Context: Used on servers with Docker, domains, and open ports 80/443
 
 ## Technical Stack
 
