@@ -120,6 +120,24 @@ outer-rim/
 
 ## Recent Work
 
+### Custom Nginx Configuration and Error Page Handling
+**Status**: ✅ COMPLETED
+
+**Objective**: Enable custom nginx configuration for xbonell.com container and add custom 404 error page handling
+
+**Implementation**:
+- Added volume mount in docker-compose.yml for custom nginx configuration: `./sites/xbonell.com/nginx.conf:/etc/nginx/conf.d/default.conf:ro`
+- Added custom 404 error page handling in nginx/vhost.d/xbonell.com:
+  - `error_page 404 /error;` directive to redirect 404 errors to `/error` endpoint
+  - Location block for `/error` that tries multiple error page locations (`/error`, `/error.html`, `/error/index.html`)
+
+**Result**: xbonell.com service can now use custom nginx configuration, and 404 errors are handled with a custom error page
+
+**Technical Details**:
+- Custom nginx configuration is mounted read-only for security
+- Error page location block ensures fallback options if error page files are in different locations
+- Maintains security best practices with read-only volume mounts
+
 ### Nginx Configuration SEO Improvements
 **Status**: ✅ COMPLETED
 
@@ -227,6 +245,8 @@ docker-compose restart acme-companion
 - **Image**: `nginx:alpine`
 - **Purpose**: Example static site configuration
 - **Domains**: xbonell.com, www.xbonell.com
+- **Custom Configuration**: Supports custom nginx configuration via `./sites/xbonell.com/nginx.conf`
+- **Error Handling**: Custom 404 error page via `/error` endpoint
 - **Security**: Read-only filesystem, resource limits
 
 ## Troubleshooting

@@ -63,6 +63,7 @@ services:
       - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL:?LETSENCRYPT_EMAIL environment variable is required}
     volumes:
       - ./sites/xbonell.com:/usr/share/nginx/html:ro
+      - ./sites/xbonell.com/nginx.conf:/etc/nginx/conf.d/default.conf:ro
     networks:
       - web
     security_opt:
