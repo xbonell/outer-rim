@@ -120,6 +120,24 @@ outer-rim/
 
 ## Recent Work
 
+### Nginx Configuration SEO Improvements
+**Status**: ✅ COMPLETED
+
+**Objective**: Improve SEO by using permanent redirects and canonical domain setup
+
+**Implementation**:
+- Changed language-based redirects from 302 (temporary) to 301 (permanent) for better SEO
+- Simplified www subdomain configurations to redirect-only (canonical domain setup)
+- Added SEO-focused comments explaining redirect strategy
+- Applied to: bgespecialitats.com, www.bgespecialitats.com, xbonell.com, www.xbonell.com
+
+**Result**: Better SEO performance with permanent redirects and consolidated domain authority
+
+**Technical Details**:
+- Non-www domains: Use 301 redirects for language-based routing
+- WWW domains: Simplified to redirect-only configurations (www → non-www)
+- Prevents duplicate content issues and consolidates SEO value
+
 ### Webhook Infrastructure Removal (July 28, 2025)
 **Status**: ✅ ARCHIVED
 

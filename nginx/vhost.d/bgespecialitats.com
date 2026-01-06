@@ -1,12 +1,14 @@
 # Redirect based on language if requesting root
+# Using 301 (permanent) instead of 302 (temporary) for better SEO
+# Note: For optimal SEO, also implement hreflang tags in your HTML
 location = / {
     if ($http_accept_language ~* ^ca) {
-        return 302 /ca/;
+        return 301 /ca/;
     }
     if ($http_accept_language ~* ^es) {
-        return 302 /es/;
+        return 301 /es/;
     }
-    return 302 /es/;
+    return 301 /es/;
 }
 
 # Usual static file serving
