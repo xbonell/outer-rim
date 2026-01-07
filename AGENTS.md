@@ -164,17 +164,18 @@ outer-rim/
 
 **Implementation**:
 - Added volume mount in docker-compose.yml for custom nginx configuration: `./sites/xbonell.com/nginx.conf:/etc/nginx/conf.d/default.conf:ro`
-- Created `sites/xbonell.com/nginx.conf` with custom 404 error page handling
-- Added custom 404 error page handling in nginx/vhost.d/xbonell.com:
-  - `error_page 404 /error;` directive to redirect 404 errors to `/error` endpoint
-  - Location block for `/error` that tries multiple error page locations (`/error`, `/error.html`, `/error/index.html`)
+- Created `sites/xbonell.com/nginx.conf` with custom 404 error page handling via `/error` endpoint
+- Removed redundant `root` directive and `error_page` handling from nginx/vhost.d/xbonell.com (404 handling belongs in container's nginx.conf, not proxy-level vhost.d)
 
-**Result**: xbonell.com service can now use custom nginx configuration, and 404 errors are handled with a custom error page
+**Result**: xbonell.com service can now use custom nginx configuration, and 404 errors are handled with a custom error page at the container level
 
 **Technical Details**:
 - Custom nginx configuration is mounted read-only for security
+- 404 error handling implemented in container's nginx.conf (not proxy-level vhost.d)
 - Error page location block ensures fallback options if error page files are in different locations
+- vhost.d file now only contains proxy-level configuration (redirects, security headers)
 - Maintains security best practices with read-only volume mounts
+- Matches the pattern used in bgespecialitats.com for consistency
 
 ### Nginx Configuration SEO Improvements
 **Status**: ✅ COMPLETED

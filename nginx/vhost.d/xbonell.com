@@ -14,16 +14,6 @@ location = / {
     return 301 /es/;
 }
 
-# Usual static file serving
-root /usr/share/nginx/html;
-
-# Custom 404 error page - serve /error page
-error_page 404 /error;
-location = /error {
-    # Ensure the error page is accessible
-    try_files /error /error.html /error/index.html =404;
-}
-
 # Security headers
 add_header X-Frame-Options "SAMEORIGIN" always;
 add_header X-Content-Type-Options "nosniff" always;
