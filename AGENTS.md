@@ -120,6 +120,22 @@ outer-rim/
 
 ## Recent Work
 
+### Custom Nginx Configuration for bgespecialitats.com
+**Status**: ✅ COMPLETED
+
+**Objective**: Enable custom nginx configuration for bgespecialitats.com container, consistent with xbonell.com setup
+
+**Implementation**:
+- Added volume mount in docker-compose.yml for custom nginx configuration: `./sites/bgespecialitats.com/nginx.conf:/etc/nginx/conf.d/default.conf:ro`
+- Removed `root /usr/share/nginx/html;` directive from nginx/vhost.d/bgespecialitats.com (root directive should be in the container's custom nginx.conf, not in the vhost.d file)
+
+**Result**: bgespecialitats.com service can now use custom nginx configuration, maintaining consistency with xbonell.com setup
+
+**Technical Details**:
+- Custom nginx configuration is mounted read-only for security
+- Root directive moved to container-level configuration for proper separation of concerns
+- Maintains security best practices with read-only volume mounts
+
 ### Custom Nginx Configuration and Error Page Handling
 **Status**: ✅ COMPLETED
 
@@ -247,6 +263,13 @@ docker-compose restart acme-companion
 - **Domains**: xbonell.com, www.xbonell.com
 - **Custom Configuration**: Supports custom nginx configuration via `./sites/xbonell.com/nginx.conf`
 - **Error Handling**: Custom 404 error page via `/error` endpoint
+- **Security**: Read-only filesystem, resource limits
+
+### bgespecialitats.com
+- **Image**: `nginx:alpine`
+- **Purpose**: Static site configuration
+- **Domains**: bgespecialitats.com, www.bgespecialitats.com
+- **Custom Configuration**: Supports custom nginx configuration via `./sites/bgespecialitats.com/nginx.conf`
 - **Security**: Read-only filesystem, resource limits
 
 ## Troubleshooting

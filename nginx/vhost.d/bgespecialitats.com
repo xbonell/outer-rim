@@ -11,9 +11,6 @@ location = / {
     return 301 /es/;
 }
 
-# Usual static file serving
-root /usr/share/nginx/html;
-
 # Security headers
 add_header X-Frame-Options "SAMEORIGIN" always;
 add_header X-Content-Type-Options "nosniff" always;
