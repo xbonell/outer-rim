@@ -120,6 +120,25 @@ outer-rim/
 
 ## Recent Work
 
+### Nginx Configuration Files Version Control and 404 Handling
+**Status**: ✅ COMPLETED
+
+**Objective**: Ensure nginx configuration files are version controlled and properly implement 404 error handling for all sites
+
+**Implementation**:
+- Updated `.gitignore` to allow tracking of `nginx.conf` files in `sites/` directories while keeping site content ignored
+- Created missing `sites/xbonell.com/nginx.conf` with custom 404 error page handling via `/error` endpoint
+- Added `sites/bgespecialitats.com/nginx.conf` to version control (already existed with language-specific 404 handling)
+- Both configuration files now properly tracked in git repository
+
+**Result**: All nginx configuration files are now version controlled, ensuring consistent deployments and proper 404 error handling across all sites
+
+**Technical Details**:
+- **bgespecialitats.com**: Language-aware 404 handling that serves `/ca/404` or `/es/404` based on URL path or Accept-Language header
+- **xbonell.com**: Simple 404 handling that serves `/error` endpoint with fallback options
+- Configuration files mounted read-only for security
+- `.gitignore` pattern updated: `sites/*/*` with exception `!sites/*/nginx.conf`
+
 ### Custom Nginx Configuration for bgespecialitats.com
 **Status**: ✅ COMPLETED
 
@@ -128,12 +147,14 @@ outer-rim/
 **Implementation**:
 - Added volume mount in docker-compose.yml for custom nginx configuration: `./sites/bgespecialitats.com/nginx.conf:/etc/nginx/conf.d/default.conf:ro`
 - Removed `root /usr/share/nginx/html;` directive from nginx/vhost.d/bgespecialitats.com (root directive should be in the container's custom nginx.conf, not in the vhost.d file)
+- Implemented language-specific 404 error handling in nginx.conf
 
-**Result**: bgespecialitats.com service can now use custom nginx configuration, maintaining consistency with xbonell.com setup
+**Result**: bgespecialitats.com service can now use custom nginx configuration with language-aware 404 error pages
 
 **Technical Details**:
 - Custom nginx configuration is mounted read-only for security
 - Root directive moved to container-level configuration for proper separation of concerns
+- Language-specific 404 handling: serves `/ca/404` or `/es/404` based on URL path or Accept-Language header
 - Maintains security best practices with read-only volume mounts
 
 ### Custom Nginx Configuration and Error Page Handling
@@ -143,6 +164,7 @@ outer-rim/
 
 **Implementation**:
 - Added volume mount in docker-compose.yml for custom nginx configuration: `./sites/xbonell.com/nginx.conf:/etc/nginx/conf.d/default.conf:ro`
+- Created `sites/xbonell.com/nginx.conf` with custom 404 error page handling
 - Added custom 404 error page handling in nginx/vhost.d/xbonell.com:
   - `error_page 404 /error;` directive to redirect 404 errors to `/error` endpoint
   - Location block for `/error` that tries multiple error page locations (`/error`, `/error.html`, `/error/index.html`)
@@ -261,15 +283,16 @@ docker-compose restart acme-companion
 - **Image**: `nginx:alpine`
 - **Purpose**: Example static site configuration
 - **Domains**: xbonell.com, www.xbonell.com
-- **Custom Configuration**: Supports custom nginx configuration via `./sites/xbonell.com/nginx.conf`
-- **Error Handling**: Custom 404 error page via `/error` endpoint
+- **Custom Configuration**: Supports custom nginx configuration via `./sites/xbonell.com/nginx.conf` (version controlled)
+- **Error Handling**: Custom 404 error page via `/error` endpoint with fallback options
 - **Security**: Read-only filesystem, resource limits
 
 ### bgespecialitats.com
 - **Image**: `nginx:alpine`
 - **Purpose**: Static site configuration
 - **Domains**: bgespecialitats.com, www.bgespecialitats.com
-- **Custom Configuration**: Supports custom nginx configuration via `./sites/bgespecialitats.com/nginx.conf`
+- **Custom Configuration**: Supports custom nginx configuration via `./sites/bgespecialitats.com/nginx.conf` (version controlled)
+- **Error Handling**: Language-aware 404 error pages (`/ca/404` or `/es/404`) based on URL path or Accept-Language header
 - **Security**: Read-only filesystem, resource limits
 
 ## Troubleshooting

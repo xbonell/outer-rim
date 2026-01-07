@@ -163,7 +163,7 @@ outer-rim/
 │   ├── vhost.d/         # Custom nginx configurations
 │   ├── conf.d/          # Additional nginx configurations
 │   └── html/            # Static files
-├── sites/               # Static site content
+├── sites/               # Static site content (nginx.conf files are version controlled)
 └── README.md            # This file
 ```
 
@@ -185,6 +185,16 @@ outer-rim/
 - **Image**: `nginx:alpine`
 - **Purpose**: Example static site configuration
 - **Domains**: xbonell.com, www.xbonell.com
+- **Custom Configuration**: Custom nginx configuration via `./sites/xbonell.com/nginx.conf`
+- **Error Handling**: Custom 404 error page via `/error` endpoint
+- **Security**: Read-only filesystem, resource limits
+
+### bgespecialitats.com
+- **Image**: `nginx:alpine`
+- **Purpose**: Static site configuration
+- **Domains**: bgespecialitats.com, www.bgespecialitats.com
+- **Custom Configuration**: Custom nginx configuration via `./sites/bgespecialitats.com/nginx.conf`
+- **Error Handling**: Language-aware 404 error pages (`/ca/404` or `/es/404`) based on URL path or Accept-Language header
 - **Security**: Read-only filesystem, resource limits
 
 ## Usage Examples

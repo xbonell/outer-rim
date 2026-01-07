@@ -45,8 +45,11 @@ hooks/*.sh
 hooks/*.json
 monitor.sh
 
-# Sites
-sites/**/*
+# Sites (ignore all except nginx.conf configuration files)
+sites/*
+!sites/*/
+sites/*/*
+!sites/*/nginx.conf
 
 # Override files
 docker-compose.override.yml
