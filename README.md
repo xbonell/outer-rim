@@ -187,6 +187,7 @@ outer-rim/
 - **Domains**: xbonell.com, www.xbonell.com
 - **Custom Configuration**: Custom nginx configuration via `./sites/xbonell.com/nginx.conf`
 - **Error Handling**: Custom 404 error page via `/error` endpoint
+- **Performance**: Gzip compression enabled for text-based content
 - **Security**: Read-only filesystem, resource limits
 
 ### bgespecialitats.com
@@ -195,7 +196,7 @@ outer-rim/
 - **Domains**: bgespecialitats.com, www.bgespecialitats.com
 - **Custom Configuration**: Custom nginx configuration via `./sites/bgespecialitats.com/nginx.conf`
 - **Error Handling**: Language-aware 404 error pages (`/ca/404` or `/es/404`) based on URL path or Accept-Language header
-- **Performance**: Long-term caching for static assets (CSS, JS, fonts, images) with 1 year expiration
+- **Performance**: Gzip compression enabled; long-term caching for static assets (CSS, JS, fonts, images) with 1 year expiration
 - **Security**: Read-only filesystem, resource limits
 
 ## Usage Examples

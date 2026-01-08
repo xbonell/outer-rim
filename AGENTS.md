@@ -120,6 +120,30 @@ outer-rim/
 
 ## Recent Work
 
+### Gzip Compression for All Sites
+**Status**: ✅ COMPLETED
+
+**Objective**: Improve performance by enabling gzip compression for text-based content on all sites
+
+**Implementation**:
+- Added gzip compression configuration to bgespecialitats.com nginx.conf
+- Added gzip compression configuration to xbonell.com nginx.conf
+- Configured compression level 6 (balanced compression ratio and CPU usage)
+- Enabled compression for text, CSS, JavaScript, JSON, XML, RSS, fonts, and SVG content types
+- Set minimum file size threshold (1000 bytes) to avoid compressing very small files
+- Disabled compression for IE6 (legacy browser compatibility)
+- Enabled Vary header to ensure proper cache handling for compressed content
+- Configured to work with proxied content
+
+**Result**: Reduced bandwidth usage and faster page loads, especially for text-based content
+
+**Technical Details**:
+- Compression level: 6 (balanced between compression ratio and CPU usage)
+- Content types: text/plain, text/css, text/xml, text/javascript, application/json, application/javascript, application/xml+rss, application/rss+xml, font/truetype, font/opentype, application/vnd.ms-fontobject, image/svg+xml
+- Minimum file size: 1000 bytes
+- Vary header enabled for proper cache handling
+- Proxied content compression enabled
+
 ### Static Asset Caching for bgespecialitats.com
 **Status**: ✅ COMPLETED
 
@@ -309,6 +333,7 @@ docker-compose restart acme-companion
 - **Domains**: xbonell.com, www.xbonell.com
 - **Custom Configuration**: Supports custom nginx configuration via `./sites/xbonell.com/nginx.conf` (version controlled)
 - **Error Handling**: Custom 404 error page via `/error` endpoint with fallback options
+- **Performance**: Gzip compression enabled for text-based content
 - **Security**: Read-only filesystem, resource limits
 
 ### bgespecialitats.com
@@ -317,7 +342,7 @@ docker-compose restart acme-companion
 - **Domains**: bgespecialitats.com, www.bgespecialitats.com
 - **Custom Configuration**: Supports custom nginx configuration via `./sites/bgespecialitats.com/nginx.conf` (version controlled)
 - **Error Handling**: Language-aware 404 error pages (`/ca/404` or `/es/404`) based on URL path or Accept-Language header
-- **Performance**: Long-term caching for static assets (CSS, JS, fonts, images) with 1 year expiration
+- **Performance**: Gzip compression enabled; long-term caching for static assets (CSS, JS, fonts, images) with 1 year expiration
 - **Security**: Read-only filesystem, resource limits
 
 ## Troubleshooting
