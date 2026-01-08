@@ -120,6 +120,29 @@ outer-rim/
 
 ## Recent Work
 
+### Static Asset Caching for bgespecialitats.com
+**Status**: ✅ COMPLETED
+
+**Objective**: Improve performance by adding long-term caching for static assets on bgespecialitats.com
+
+**Implementation**:
+- Added cache configuration for CSS files (1 year expiration, immutable cache control)
+- Added cache configuration for JavaScript files (1 year expiration, immutable cache control)
+- Added cache configuration for web fonts (1 year expiration, immutable cache control, CORS headers)
+- Added cache configuration for images (1 year expiration, immutable cache control)
+- Disabled access logging for static assets to reduce log noise
+- All static assets use `Cache-Control: public, immutable` header for optimal browser caching
+
+**Result**: Improved site performance with reduced server load and faster page loads for returning visitors
+
+**Technical Details**:
+- CSS files: `.css` extension, 1 year cache
+- JavaScript files: `.js` extension, 1 year cache
+- Web fonts: `.woff`, `.woff2`, `.ttf`, `.otf`, `.eot` extensions, 1 year cache with CORS headers
+- Images: `.webp`, `.jpg`, `.jpeg`, `.png`, `.gif`, `.svg`, `.ico` extensions, 1 year cache
+- Access logging disabled for all static assets to reduce log volume
+- Immutable cache control ensures browsers cache assets aggressively
+
 ### Nginx Configuration Files Version Control and 404 Handling
 **Status**: ✅ COMPLETED
 
@@ -294,6 +317,7 @@ docker-compose restart acme-companion
 - **Domains**: bgespecialitats.com, www.bgespecialitats.com
 - **Custom Configuration**: Supports custom nginx configuration via `./sites/bgespecialitats.com/nginx.conf` (version controlled)
 - **Error Handling**: Language-aware 404 error pages (`/ca/404` or `/es/404`) based on URL path or Accept-Language header
+- **Performance**: Long-term caching for static assets (CSS, JS, fonts, images) with 1 year expiration
 - **Security**: Read-only filesystem, resource limits
 
 ## Troubleshooting
