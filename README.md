@@ -282,6 +282,8 @@ This setup includes comprehensive security measures:
 - **Resource limits** to prevent DoS attacks
 - **Health checks** for all services
 - **Latest image tags** for security patches
+- **Container log rotation** to prevent disk bloat
+- **Compose-enforced resource limits** for non-Swarm deployments
 
 ### Network Security
 - **Isolated Docker network** with custom subnet

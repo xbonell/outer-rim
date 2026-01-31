@@ -32,6 +32,7 @@ This document provides comprehensive context for AI agents working on this proje
 - No-new-privileges security option
 - Resource limits to prevent DoS attacks
 - Health checks for all services
+- Container log rotation to prevent disk bloat
 - Latest image tags for security patches
 - Isolated Docker network with custom subnet
 - Rate limiting to prevent abuse
@@ -119,6 +120,23 @@ outer-rim/
 5. Test complete system functionality
 
 ## Recent Work
+
+### Operational Hardening for Compose Services
+**Status**: ✅ COMPLETED
+
+**Objective**: Improve operational safety and reliability with health checks, log rotation, and enforced limits in Docker Compose.
+
+**Implementation**:
+- Added container health checks for nginx-proxy, acme-companion, and both static sites
+- Configured log rotation for all services (json-file driver with size and file caps)
+- Enforced CPU and memory limits via Compose settings in addition to existing deploy limits
+
+**Result**: Safer long-running operation with healthier containers, bounded logs, and predictable resource usage.
+
+**Technical Details**:
+- Health checks use nginx config validation and local HTTP probes where appropriate
+- Log rotation set to 10m max size with 3 files retained
+- Compose limits mirror deploy limits for non-Swarm environments
 
 ### Gzip Compression for All Sites
 **Status**: ✅ COMPLETED
@@ -413,4 +431,3 @@ docker-compose logs -f
 # Check resource usage
 docker stats
 ```
-
