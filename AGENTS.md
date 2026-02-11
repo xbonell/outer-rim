@@ -49,7 +49,7 @@ This document provides comprehensive context for AI agents working on this proje
 - **Reverse proxy pattern** - Centralized routing through nginx-proxy
 - **Automated certificate management** - Let's Encrypt via acme-companion
 - **Docker network isolation** - Custom bridge network (172.20.0.0/16)
-- **Security as code** - Checklists, scripts, health checks
+- **Security as code** - Checklists and health checks
 - **Monitoring and logging** - Comprehensive logging for audit trails
 
 ### Architecture Overview
