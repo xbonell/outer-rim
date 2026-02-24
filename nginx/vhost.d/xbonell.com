@@ -14,6 +14,12 @@ location = / {
     return 301 /es/;
 }
 
+# Normalize section-like URLs to trailing-slash canonical URLs
+# Excludes file-like paths with an extension (e.g. .css, .png, .xml)
+location ~ ^/(?!.*\.[^/]+$).+[^/]$ {
+    return 301 $scheme://$host$uri/$is_args$args;
+}
+
 # Security headers
 add_header X-Frame-Options "SAMEORIGIN" always;
 add_header X-Content-Type-Options "nosniff" always;
