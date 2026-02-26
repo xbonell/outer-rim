@@ -140,4 +140,4 @@ docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image
 ### SOX Compliance (if applicable)
 - [ ] Maintain audit trails
 - [ ] Implement change management
-- [ ] Regular security assessments 
+- [ ] Regular security assessments

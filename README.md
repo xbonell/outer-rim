@@ -6,6 +6,13 @@ A Docker Compose-based reverse proxy solution for hosting multiple web applicati
 
 This project provides a reverse proxy solution using nginx-proxy with automatic SSL certificate generation and renewal through Let's Encrypt. It's perfect for hosting multiple web applications across multiple domains with automatic HTTPS. While primarily designed for Docker containers, it can also be configured to proxy to native services running outside Docker.
 
+## Project Documentation
+
+- `AGENTS.md`: concise guidance for agentic coding tools operating in this repository
+- `CHANGELOG.md`: historical engineering changes and migration notes
+- `docs/troubleshooting.md`: operational troubleshooting runbook
+- `docs/security-checklist.md`: periodic security review checklist
+
 ## Features
 
 - **Reverse Proxy**: Routes traffic to multiple containers based on hostnames
@@ -157,7 +164,9 @@ outer-rim/
 ├── .env                  # Environment variables (create from env.example)
 ├── .gitignore           # Git ignore rules
 ├── setup.sh             # Secure setup script
-├── security-checklist.md # Security audit checklist
+├── docs/
+│   ├── security-checklist.md # Security audit checklist
+│   └── troubleshooting.md   # Ops troubleshooting runbook
 ├── nginx/
 │   ├── certs/           # SSL certificates (auto-generated)
 │   ├── vhost.d/         # Custom nginx configurations
@@ -317,8 +326,8 @@ This setup includes comprehensive security measures:
 ### Regular Security Audits
 Use the provided security checklist:
 ```bash
-# Review security-checklist.md for comprehensive audit guidelines
-cat security-checklist.md
+# Review docs/security-checklist.md for comprehensive audit guidelines
+cat docs/security-checklist.md
 ```
 
 ### Updates
